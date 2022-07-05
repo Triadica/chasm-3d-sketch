@@ -6,12 +6,14 @@ uniform vec3 upwardDirection; // direction up over head, better unit vectorunifo
 uniform float viewportRatio;
 uniform vec3 cameraPosition;
 
-attribute float a_idx;
+attribute vec3 a_position;
+attribute float a_color_index;
 
 varying float v_r;
 varying float v_s;
 varying float z_color;
 varying vec3 original_position;
+varying float v_color_index;
 
 float square(float a) {
   return a * a;
@@ -129,20 +131,6 @@ PointResult transform_perspective(vec3 p) {
 
 void main() {
 
-  // vec3 popped = a_position;
-  // popped.y += pNoise(a_position.xz*vec2(2., 2.), 10) * 6000.;
-
-  float r = 0.01 * a_idx;
-  float angle = a_idx * 0.02;
-  float x = r * cos(angle);
-  float y = r * sin(angle);
-  float scale_down = 0.002;
-  vec3 a_position = vec3(
-    x,
-    60.0 * snoise(vec2(scale_down * x, scale_down * y)),
-    y
-  );
-
   PointResult result = transform_perspective(a_position);
   vec3 pos_next = result.point;
 
@@ -150,6 +138,7 @@ void main() {
 
   v_r = result.r;
   v_s = result.s;
+  v_color_index = a_color_index;
 
   // if (result.r > 0.0) {
     gl_Position = vec4(pos_next * 0.001, 1.0);

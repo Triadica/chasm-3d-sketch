@@ -13,6 +13,7 @@
     "@calcit/procs": "^0.5.47",
     "@quamolit/touch-control": "^0.0.11",
     "mobile-detect": "^1.4.5",
+    "nanoid": "^4.0.0",
     "twgl.js": "^4.23.2"
   }
 }

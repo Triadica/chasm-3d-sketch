@@ -19,3 +19,7 @@ body .touch-control .left-hand {
 body .touch-control .right-hand {
   right: 60px;
 }
+
+.touch-control {
+  z-index: 100;
+}
