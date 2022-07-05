@@ -13,6 +13,7 @@
                 focused $ get-in store ([] :shapes focused-id)
               group ({})
                 comp-landscape $ :shapes store
+                axis-object
                 if (some? focused)
                   group ({})
                     comp-drag-point
@@ -44,6 +45,7 @@
           triadica.alias :refer $ object group
           triadica.math :refer $ &v+
           triadica.core :refer $ %nested-attribute
+          triadica.app.shapes :refer $ axis-object
           app.comp.landscape :refer $ comp-landscape
           triadica.comp.drag-point :refer $ comp-drag-point
     |app.comp.controller $ {}
@@ -60,12 +62,12 @@
                 forward @perspective/*viewer-forward
                 upward @perspective/*viewer-upward
                 rightward $ v-cross forward upward
-                p0 $ &v+ viewer (v-scale forward 400)
+                p0 $ &v+ viewer (v-scale forward 200)
               {} (:p0 p0)
                 :p1 $ &v+ p0 (v-scale rightward 200)
                 :p2 $ &v+
                   &v+ p0 $ v-scale upward 100
-                  v-scale forward 200
+                  v-scale forward 20
                 :color-type color-type
                 :index $ get-index!
         |color-types $ quote
@@ -112,6 +114,10 @@
                 span $ {} (:class-name css-action) (:inner-text "\"Add")
                   :on-click $ fn (e d!)
                     d! :new-shape $ assemble-new-shape color-type
+                span $ {} (:class-name css-action) (:inner-text "\"Dup")
+                  :on-click $ fn (e d!)
+                    d! :new-shape $ -> focused-shape (dissoc :id)
+                      assoc :index $ get-index!
                 span $ {} (:class-name css-action) (:inner-text "\"more...")
                   :on-click $ fn (e d!) (.show more-actions-plugin d!)
                 .render colors-plugin
@@ -120,23 +126,22 @@
                   comp-shapes-list (:shapes store) (:current-focus store)
         |comp-shapes-list $ quote
           defcomp comp-shapes-list (shapes focused-id)
-            div
+            list->
               {} $ :class-name css-shapes-list
-              list-> ({})
-                ->
-                  .to-list $ .values shapes
-                  .sort-by $ fn (shape) (:index shape)
-                  map $ fn (shape)
-                    let
-                        shape-id $ :id shape
-                      [] shape-id $ div
-                        {} (:class-name css-shape)
-                          :style $ if (= focused-id shape-id)
-                            {} $ :background-color (hsl 200 0 90)
-                          :on-click $ fn (e d!) (d! :focus-to shape-id)
-                        <> $ :index shape
-                        =< 8 nil
-                        <> $ :color-type shape
+              ->
+                .to-list $ .values shapes
+                .sort-by $ fn (shape) (:index shape)
+                map $ fn (shape)
+                  let
+                      shape-id $ :id shape
+                    [] shape-id $ div
+                      {} (:class-name css-shape)
+                        :style $ if (= focused-id shape-id)
+                          {} $ :background-color (hsl 200 0 90)
+                        :on-click $ fn (e d!) (d! :focus-to shape-id)
+                      <> $ :index shape
+                      =< 8 nil
+                      <> $ :color-type shape
         |css-action $ quote
           defstyle css-action $ {}
             "\"$0" $ {} (:margin "\"0 8px") (:cursor :pointer) (:user-select :none)
@@ -148,10 +153,8 @@
             "\"$0" $ {} (:color :black) (:padding "\"4px 8px")
         |css-shapes-list $ quote
           defstyle css-shapes-list $ {}
-            "\"$0" $ {} (:position :fixed) (:z-index 1001) (:top 44) (:left 8) (:min-width 40) (:max-height "\"90vh") (:padding "\"8px 0")
+            "\"$0" $ {} (:position :fixed) (:z-index 1001) (:top 44) (:left 8) (:min-width 40) (:max-height "\"84vh") (:padding "\"8px 0") (:border-radius "\"4px") (:z-index 80) (:overflow :auto) (:padding-bottom 100) (:line-height "\"20px")
               :background-color $ hsl 0 0 100 0.8
-              :border-radius "\"4px"
-              :z-index 80
         |get-index! $ quote
           defn get-index! () $ let
               v @*index-cache
@@ -174,7 +177,6 @@
           defn comp-landscape (shapes)
             let
                 shapes-list $ .to-list (.values shapes)
-              js/console.log "\"shapes" shapes-list
               object $ {} (:draw-mode :triangles)
                 :vertex-shader $ inline-shader "\"shape.vert"
                 :fragment-shader $ inline-shader "\"shape.frag"
