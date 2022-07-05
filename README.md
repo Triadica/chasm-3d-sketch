@@ -1,19 +1,8 @@
-# Triadica Workflow
+# Chasm 3D Sketch
 
-- Demo https://r.tiye.me/Triadica/triadica-workflow/
+- Demo https://r.tiye.me/Triadica/chasm-3d-sketch/
 
-### Usages
-
-Depends on Node.js and [Calcit](http://calcit-lang.org/), to develop:
-
-```bash
-yarn
-# also launcher @calcit/editor for Cirru editing
-cr --emit-js --watch-dir shaders/ # watcher
-yarn vite # watcher
-```
-
-shader files in [`shaders/`](shaders/).
+> experiment for toying with 3D map
 
 ### Workflow
 
