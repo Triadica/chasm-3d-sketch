@@ -8,6 +8,10 @@ body {
   background-color: black;
 }
 
+body * {
+  box-sizing: border-box;
+}
+
 canvas {
   width: 100vw;
   height: 100vh;
@@ -18,4 +22,8 @@ body .touch-control .left-hand {
 }
 body .touch-control .right-hand {
   right: 60px;
+}
+
+.touch-control {
+  z-index: 100;
 }
