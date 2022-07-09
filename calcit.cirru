@@ -54,7 +54,7 @@
                               |b $ {} (:at 1657035292850) (:by |u0) (:text |store) (:type :leaf)
                       |X $ {} (:at 1657044775181) (:by |u0) (:type :expr)
                         :data $ {}
-                          |T $ {} (:at 1657044794348) (:by |u0) (:text |axis-object) (:type :leaf)
+                          |T $ {} (:at 1657389909165) (:by |u0) (:text |comp-axis) (:type :leaf)
                       |b $ {} (:at 1657036993660) (:by |u0) (:type :expr)
                         :data $ {}
                           |D $ {} (:at 1657036994175) (:by |u0) (:text |if) (:type :leaf)
@@ -318,11 +318,11 @@
                         |T $ {} (:at 1657016326108) (:by |u0) (:text |%nested-attribute) (:type :leaf)
                 |r $ {} (:at 1657044761933) (:by |u0) (:type :expr)
                   :data $ {}
-                    |T $ {} (:at 1657044801432) (:by |u0) (:text |triadica.app.shapes) (:type :leaf)
+                    |T $ {} (:at 1657389901658) (:by |u0) (:text |triadica.comp.axis) (:type :leaf)
                     |b $ {} (:at 1657044768209) (:by |u0) (:text |:refer) (:type :leaf)
                     |h $ {} (:at 1657044768384) (:by |u0) (:type :expr)
                       :data $ {}
-                        |T $ {} (:at 1657044799873) (:by |u0) (:text |axis-object) (:type :leaf)
+                        |T $ {} (:at 1657389905432) (:by |u0) (:text |comp-axis) (:type :leaf)
                 |s $ {} (:at 1657016336456) (:by |u0) (:type :expr)
                   :data $ {}
                     |T $ {} (:at 1657035276809) (:by |u0) (:text |app.comp.landscape) (:type :leaf)
@@ -1829,7 +1829,7 @@
                   |h $ {} (:at 1654078040543) (:by |u0) (:text |dispatch!) (:type :leaf)
               |o $ {} (:at 1653321474763) (:by |u0) (:type :expr)
                 :data $ {}
-                  |T $ {} (:at 1653325081686) (:by |u0) (:text |render-canvas!) (:type :leaf)
+                  |T $ {} (:at 1657389919786) (:by |u0) (:text |paint-canvas!) (:type :leaf)
               |q $ {} (:at 1657016651496) (:by |u0) (:type :expr)
                 :data $ {}
                   |T $ {} (:at 1657016656535) (:by |u0) (:text |respo/render!) (:type :leaf)
@@ -1892,7 +1892,7 @@
                         |T $ {} (:at 1651658530130) (:by |u0) (:text |handle-key-event) (:type :leaf)
                         |b $ {} (:at 1651660599972) (:by |u0) (:text |on-control-event) (:type :leaf)
                         |h $ {} (:at 1653322391028) (:by |u0) (:text |load-objects!) (:type :leaf)
-                        |l $ {} (:at 1653326355435) (:by |u0) (:text |render-canvas!) (:type :leaf)
+                        |l $ {} (:at 1657389927597) (:by |u0) (:text |paint-canvas!) (:type :leaf)
                         |o $ {} (:at 1654074721872) (:by |u0) (:text |handle-screen-click!) (:type :leaf)
                         |q $ {} (:at 1654197926305) (:by |u0) (:text |setup-mouse-events!) (:type :leaf)
                         |s $ {} (:at 1656008718290) (:by |u0) (:text |reset-canvas-size!) (:type :leaf)
