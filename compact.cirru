@@ -13,7 +13,7 @@
                 focused $ get-in store ([] :shapes focused-id)
               group ({})
                 comp-landscape $ :shapes store
-                axis-object
+                comp-axis
                 if (some? focused)
                   group ({})
                     comp-drag-point
@@ -45,7 +45,7 @@
           triadica.alias :refer $ object group
           triadica.math :refer $ &v+
           triadica.core :refer $ %nested-attribute
-          triadica.app.shapes :refer $ axis-object
+          triadica.comp.axis :refer $ comp-axis
           app.comp.landscape :refer $ comp-landscape
           triadica.comp.drag-point :refer $ comp-drag-point
     |app.comp.controller $ {}
@@ -248,7 +248,7 @@
         |render-app! $ quote
           defn render-app! ()
             load-objects! (comp-container @*store) dispatch!
-            render-canvas!
+            paint-canvas!
             respo/render! mount-target (comp-controller @*store) dispatch!
       :ns $ quote
         ns app.main $ :require ("\"./calcit.build-errors" :default build-errors) ("\"bottom-tip" :default hud!)
@@ -256,7 +256,7 @@
           "\"twgl.js" :as twgl
           respo.core :as respo
           touch-control.core :refer $ render-control! start-control-loop! replace-control-loop!
-          triadica.core :refer $ handle-key-event on-control-event load-objects! render-canvas! handle-screen-click! setup-mouse-events! reset-canvas-size!
+          triadica.core :refer $ handle-key-event on-control-event load-objects! paint-canvas! handle-screen-click! setup-mouse-events! reset-canvas-size!
           triadica.global :refer $ *gl-context *uniform-data
           triadica.hud :refer $ inject-hud!
           app.comp.container :refer $ comp-container
