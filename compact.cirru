@@ -54,7 +54,6 @@
         |actions $ quote
           def actions $ []
             {} (:value :delete) (:display "\"DELETE")
-            {} (:value :reset-color-type) (:display "\"Reset Color Type")
         |assemble-new-shape $ quote
           defn assemble-new-shape (color-type)
             let
@@ -72,14 +71,31 @@
                 :index $ get-index!
         |color-types $ quote
           def color-types $ []
-            {} (:value 0) (:display "\"0")
-            {} (:value 1) (:display "\"1")
-            {} (:value 2) (:display "\"2")
-            {} (:value 3) (:display "\"3")
-            {} (:value 4) (:display "\"4")
-            {} (:value 5) (:display "\"5")
-            {} (:value 6) (:display "\"6")
-            {} (:value 7) (:display "\"7")
+            {} (:value 0)
+              :display $ comp-color-sample 0
+            {} (:value 1)
+              :display $ comp-color-sample 1
+            {} (:value 2)
+              :display $ comp-color-sample 2
+            {} (:value 3)
+              :display $ comp-color-sample 3
+            {} (:value 4)
+              :display $ comp-color-sample 4
+            {} (:value 5)
+              :display $ comp-color-sample 5
+            {} (:value 6)
+              :display $ comp-color-sample 6
+            {} (:value 7)
+              :display $ comp-color-sample 7
+        |comp-color-sample $ quote
+          defcomp comp-color-sample (i)
+            div
+              {} (:class-name css-color-sample)
+                :style $ {}
+                  :background-color $ index->color i
+                  :margin "\"4px 8px"
+              <> (str i)
+                {} (:font-family ui/font-code) (:opacity 0.8)
         |comp-controller $ quote
           defcomp comp-controller (store)
             let
@@ -91,10 +107,22 @@
                   focus $ :current-focus store
                   get-in store $ [] :shapes focus
                 color-type $ :current-color-type store
-                colors-plugin $ use-modal-menu (>> states :colors)
+                colors-plugin $ use-modal (>> states :colors)
                   {} (:title "\"select color type") (:items color-types)
-                    :on-result $ fn (v d!)
-                      d! :color-type $ :value v
+                    :render $ fn (on-close)
+                      list->
+                        {} $ :style
+                          merge ui/row-middle $ {} (:padding "\"8px")
+                        -> color-types $ map
+                          fn (info)
+                            [] (:value info)
+                              div
+                                {}
+                                  :style $ {} (:cursor :pointer)
+                                  :on-click $ fn (e d!)
+                                    d! :color-type $ :value info
+                                    on-close d!
+                                :display info
                 more-actions-plugin $ use-modal-menu (>> states :more)
                   {} (:title "\"actions") (:items actions)
                     :on-result $ fn (v d!)
@@ -105,19 +133,23 @@
                           d! :reset-color-type nil
               div
                 {} $ :class-name (str-spaced css/global css/row-middle css-controller)
+                span
+                  {} (:class-name css-action) (:style ui/row-middle)
+                    :on-click $ fn (e d!) (.show colors-plugin d!)
+                  <> "\"ColorType:"
+                  comp-color-sample color-type
                 span $ {} (:class-name css-action) (:inner-text "\"List")
                   :on-click $ fn (e d!)
                     d! cursor $ update state :show-list? not
-                span $ {} (:class-name css-action)
-                  :inner-text $ str "\"ColorType: " color-type
-                  :on-click $ fn (e d!) (.show colors-plugin d!)
                 span $ {} (:class-name css-action) (:inner-text "\"Add")
                   :on-click $ fn (e d!)
                     d! :new-shape $ assemble-new-shape color-type
-                span $ {} (:class-name css-action) (:inner-text "\"Dup")
+                span $ {} (:class-name css-action) (:inner-text "\"Dupicate")
                   :on-click $ fn (e d!)
                     d! :new-shape $ -> focused-shape (dissoc :id)
                       assoc :index $ get-index!
+                span $ {} (:class-name css-action) (:inner-text "\"color!")
+                  :on-click $ fn (e d!) (d! :reset-color-type nil)
                 span $ {} (:class-name css-action) (:inner-text "\"more...")
                   :on-click $ fn (e d!) (.show more-actions-plugin d!)
                 .render colors-plugin
@@ -139,27 +171,40 @@
                         :style $ if (= focused-id shape-id)
                           {} $ :background-color (hsl 200 0 90)
                         :on-click $ fn (e d!) (d! :focus-to shape-id)
-                      <> $ :index shape
+                      <> (:index shape)
+                        {} (:font-family ui/font-code)
+                          :color $ hsl 0 0 60
                       =< 8 nil
-                      <> $ :color-type shape
+                      comp-color-sample $ :color-type shape
         |css-action $ quote
           defstyle css-action $ {}
             "\"$0" $ {} (:margin "\"0 8px") (:cursor :pointer) (:user-select :none)
+        |css-color-sample $ quote
+          defstyle css-color-sample $ {}
+            "\"$0" $ merge ui/center
+              {} (:width 20) (:height 20) (:border-radius "\"4px") (:color :white)
+                :border $ str "\"1px solid " (hsl 0 0 90)
+                :font-size 10
+                :text-shadow $ str "\"0 0 2px black"
         |css-controller $ quote
           defstyle css-controller $ {}
-            "\"$0" $ {} (:position :absolute) (:top 4) (:left 16) (:color :white) (:padding "\"4px 12px")
+            "\"$0" $ {} (:position :absolute) (:top 4) (:left 0) (:color :white) (:padding "\"4px 12px")
         |css-shape $ quote
           defstyle css-shape $ {}
-            "\"$0" $ {} (:color :black) (:padding "\"4px 8px")
+            "\"$0" $ merge ui/row-middle
+              {} (:color :black) (:line-height "\"24px") (:padding "\"4px 8px") (:cursor :pointer)
         |css-shapes-list $ quote
           defstyle css-shapes-list $ {}
-            "\"$0" $ {} (:position :fixed) (:z-index 1001) (:top 44) (:left 8) (:min-width 40) (:max-height "\"84vh") (:padding "\"8px 0") (:border-radius "\"4px") (:z-index 80) (:overflow :auto) (:padding-bottom 100) (:line-height "\"20px")
+            "\"$0" $ {} (:position :fixed) (:z-index 1001) (:top 44) (:left 120) (:min-width 40) (:max-height "\"84vh") (:padding "\"8px 0") (:border-radius "\"4px") (:z-index 80) (:overflow :auto) (:padding-bottom 100) (:line-height "\"20px")
               :background-color $ hsl 0 0 100 0.8
         |get-index! $ quote
           defn get-index! () $ let
               v @*index-cache
             swap! *index-cache inc 
             , v
+        |index->color $ quote
+          defn index->color (i)
+            case-default i "\"black" (0 "\"white") (1 "\"red") (2 "\"green") (3 "\"blue") (4 "\"#ff0") (5 "\"#f0f") (6 "\"#0ff")
       :ns $ quote
         ns app.comp.controller $ :require (respo-ui.core :as ui)
           respo-ui.core :refer $ hsl
@@ -168,7 +213,7 @@
           app.config :refer $ dev?
           respo.css :refer $ defstyle
           respo-ui.css :as css
-          respo-alerts.core :refer $ use-modal-menu
+          respo-alerts.core :refer $ use-modal-menu use-modal
           triadica.perspective :as perspective
           triadica.math :refer $ v-cross v-scale &v+
     |app.comp.landscape $ {}
